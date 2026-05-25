@@ -1,0 +1,71 @@
+.job-list-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.job-list-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 12px 20px;
+  background-color: #fff;
+}
+
+.row-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.job-company {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.job-title {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.row-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.pag-btn {
+  background: none;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.pag-btn.active {
+  background-color: #222;
+  color: #fff;
+  border-color: #222;
+}
+
+.pag-ellipsis {
+  font-size: 12px;
+  padding: 0 5px;
+}

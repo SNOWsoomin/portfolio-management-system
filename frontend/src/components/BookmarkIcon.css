@@ -1,0 +1,32 @@
+.bookmark-icon {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.6;
+  transition: opacity 0.2s, background-color 0.2s;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.bookmark-icon:hover {
+  opacity: 1;
+}
+
+.bookmark-icon.active {
+  opacity: 1;
+}
+
+.bookmark-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.bookmark-icon.mini {
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+}

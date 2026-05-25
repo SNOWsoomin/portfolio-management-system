@@ -1,0 +1,317 @@
+.main-page-wrapper {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  padding: 0 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.main-page-container {
+  width: 100%;
+  max-width: 1300px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.3fr;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.main-left-panel, .main-center-panel {
+  border: 1px solid #000;
+  border-radius: 15px;
+  height: 1000px;
+  background-color: #fff;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.main-left-panel {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-left-panel .bookmark-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+}
+
+.image-placeholder-container {
+  width: 100%;
+  height: 550px;
+  background-color: #fcfcfc;
+  border-bottom: 1px solid #eee;
+  border-radius: 15px 15px 0 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-icon-wrapper {
+  width: 100px;
+  height: 100px;
+  opacity: 0.3;
+}
+
+.image-icon-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.navigation-arrows {
+  position: absolute;
+  top: 255px;
+  width: 100%;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  pointer-events: none;
+}
+
+.arrow-left, .arrow-right {
+  background-color: rgba(255,255,255,0.6);
+  border: 1px solid #ccc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 5px;
+}
+
+.arrow-left:hover, .arrow-right:hover {
+  background-color: rgba(255,255,255,1);
+}
+
+.main-left-panel .panel-info {
+  flex: 1;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.company-info-row, .popup-info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.company-name {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.badge {
+  font-size: 10px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 1px 5px;
+}
+
+.card-title {
+  font-size: 18px;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.tag-type {
+  font-size: 11px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 2px 8px;
+  background-color: #fff;
+  color: #555;
+}
+
+.tag-skill {
+  font-size: 11px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  padding: 2px 8px;
+  background-color: #222;
+  color: #fff;
+}
+
+.skill-tags-row {
+  margin-top: 6px;
+}
+
+.main-center-panel {
+  overflow: hidden;
+}
+
+.map-placeholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: #fcfcfc;
+}
+
+.map-pin {
+  position: absolute;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.pin1 { top: 150px; left: 60px; }
+.pin2 { top: 250px; left: 140px; }
+.pin3 { top: 280px; left: 160px; }
+.pin4 { top: 400px; left: 210px; }
+.pin5 { top: 520px; left: 80px; }
+
+.map-popup {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.map-popup .bookmark-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.main-right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 1000px;
+}
+
+.profile-summary-card {
+  border: 1px solid #000;
+  border-radius: 15px;
+  padding: 25px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  flex: 0 0 auto;
+  text-align: left;
+}
+
+.profile-main-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.profile-left-info-block {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.profile-avatar-3to4 {
+  width: 60px;
+  height: 80px;
+  border: 1px solid #000;
+  border-radius: 6px;
+  background-color: #f0f0f0;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.profile-avatar-3to4 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-basic-info h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.profile-skills-column-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-left: 1px solid #eee;
+  padding-left: 20px;
+}
+
+.profile-skills-column-box h4 {
+  font-size: 13px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.profile-skills-vertical-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.profile-skills-vertical-list .tag-skill {
+  align-self: flex-start;
+  width: auto;
+}
+
+.profile-details-box h4 {
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-weight: normal;
+}
+
+.mini-job-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 15px;
+}
+
+.mini-job-card {
+  border: 1px solid #000;
+  border-radius: 15px;
+  padding: 15px;
+  background-color: #fff;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mini-job-card .bookmark-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.mini-job-card h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
