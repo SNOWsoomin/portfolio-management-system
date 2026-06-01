@@ -49,7 +49,6 @@ function Resume() {
           <div className="bottom-info-block">
             <h3 className="section-title">업무 스택</h3>
             <div className="bottom-tags-container">
-              {/* 추후 업무 스택 더미 데이터 매핑 영역 */}
             </div>
           </div>
         </div>

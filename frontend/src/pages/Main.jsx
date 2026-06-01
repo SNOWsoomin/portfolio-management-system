@@ -1,6 +1,7 @@
 import React from 'react';
 import './Main.css';
 import BookmarkIcon from '../components/BookmarkIcon';
+import pinImage from '../assets/placeholder.png'; 
 
 function Main() {
   return (
@@ -38,11 +39,11 @@ function Main() {
 
         <div className="main-center-panel">
           <div className="map-placeholder">
-            <div className="map-pin pin1">📍</div>
-            <div className="map-pin pin2">📍</div>
-            <div className="map-pin pin3">📍</div>
-            <div className="map-pin pin4">📍</div>
-            <div className="map-pin pin5">📍</div>
+            <div className="map-pin pin1"><img src={pinImage} alt="pin" className="pin-img" /></div>
+            <div className="map-pin pin2"><img src={pinImage} alt="pin" className="pin-img" /></div>
+            <div className="map-pin pin3"><img src={pinImage} alt="pin" className="pin-img" /></div>
+            <div className="map-pin pin4"><img src={pinImage} alt="pin" className="pin-img" /></div>
+            <div className="map-pin pin5"><img src={pinImage} alt="pin" className="pin-img" /></div>
             
             <div className="map-popup">
               <BookmarkIcon isMini={true} />
