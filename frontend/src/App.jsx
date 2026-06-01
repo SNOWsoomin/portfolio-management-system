@@ -1,122 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [portfolios, setPortfolios] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // 백엔드 API 호출 (우선 테스트용으로 userId=1 가정)
+    fetch('http://localhost:8080/api/portfolios?userId=1')
+      .then(res => {
+        if(!res.ok) throw new Error("서버 응답 실패");
+        return res.json();
+      })
+      .then(data => {
+        setPortfolios(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("백엔드 통신 에러:", err);
+        setLoading(false);
+      });
+  }, []);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div style={{ padding: '40px', fontFamily: 'sans-serif', textAlign: 'center' }}>
+      <h1>💼 내 포트폴리오 관리 시스템</h1>
+      <p style={{ color: '#666' }}>백엔드 서버와 정상적으로 연결되었는지 확인하는 화면입니다.</p>
+      <hr style={{ margin: '20px auto', maxWidth: '600px', border: '0.5px solid #eee' }} />
+      
+      {loading ? (
+        <p>🔄 백엔드에서 데이터를 져오는 중...</p>
+      ) : portfolios.length === 0 ? (
+        <div style={{ padding: '30px', backgroundColor: '#f9f9f9', display: 'inline-block', borderRadius: '8px' }}>
+          <p style={{ margin: 0, color: '#222', fontWeight: 'bold' }}>🟢 백엔드 연결 성공!</p>
+          <p style={{ margin: '5px 0 0 0', color: '#666', fontSize: '14px' }}>H2 데이터베이스가 비어있어 아직 등록된 포트폴리오는 없습니다.</p>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
+      ) : (
+        <ul style={{ listStyle: 'none', padding: 0, maxWidth: '600px', margin: '0 auto', textAlign: 'left' }}>
+          {portfolios.map((pf, index) => (
+            <li key={index} style={{ padding: '15px', border: '1px solid #ddd', borderRadius: '8px', marginBottom: '10px' }}>
+              <h3 style={{ margin: '0 0 10px 0' }}>{pf.title}</h3>
+              <p style={{ margin: 0, color: '#555' }}>{pf.introduction}</p>
             </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 export default App
