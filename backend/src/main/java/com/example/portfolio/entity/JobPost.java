@@ -25,39 +25,35 @@ public class JobPost extends BaseTimeEntity {
     @Column(nullable = false)
     private String position;
 
-    public Long getId() {
-        return id;
-    }
+    private String sourceName;
+    private String sourceUrl;
+    private String externalId;
 
-    public String getTitle() {
-        return title;
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getCompanyName() {
-        return companyName;
-    }
+    public String getCompanyName() { return companyName; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getPosition() { return position; }
+    public void setPosition(String position) { this.position = position; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getSourceName() { return sourceName; }
+    public void setSourceName(String sourceName) { this.sourceName = sourceName; }
 
-    public String getPosition() {
-        return position;
-    }
+    public String getSourceUrl() { return sourceUrl; }
+    public void setSourceUrl(String sourceUrl) { this.sourceUrl = sourceUrl; }
 
-    public void setPosition(String position) {
-        this.position = position;
-    }
+    public String getExternalId() { return externalId; }
+    public void setExternalId(String externalId) { this.externalId = externalId; }
+    private java.time.LocalDateTime crawledAt;
+
+    public java.time.LocalDateTime getCrawledAt() { return crawledAt; }
+    public void setCrawledAt(java.time.LocalDateTime crawledAt) { this.crawledAt = crawledAt; }
 }

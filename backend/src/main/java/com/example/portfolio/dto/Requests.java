@@ -29,6 +29,9 @@ public class Requests {
             @NotBlank String companyName,
             String description,
             @NotBlank String position,
+            String sourceName,
+            String sourceUrl,
+            String externalId,
             List<JobSkillRequest> skills
     ) {}
 }
