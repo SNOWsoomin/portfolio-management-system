@@ -7,22 +7,22 @@ const SignupPage = () => {
   const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
-    // 1page
+    // 1
     name: '',
     age: '',
     email: '',
     password: '',
-    // 2page
+    // 2
     education: '',
-    experience: '', // 선택 사항
-    certification: '', // 선택 사항
+    experience: '', // 선택
+    certification: '', // 선택
     techStack: '',
-    // 3page
+    //
     residence: '',
     desiredWorkplace: '',
     interestJob1: '',
-    interestJob2: '', // 선택 사항
-    interestJob3: ''  // 선택 사항
+    interestJob2: '', // 선택
+    interestJob3: ''  // 선택
   });
 
   const handleChange = (e) => {
