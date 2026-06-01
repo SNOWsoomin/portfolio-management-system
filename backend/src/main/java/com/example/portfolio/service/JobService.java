@@ -3,7 +3,7 @@ package com.example.portfolio.service;
 import com.example.portfolio.dto.Requests.JobPostRequest;
 import com.example.portfolio.dto.Requests.JobSkillRequest;
 import com.example.portfolio.dto.CrawledJobPost;
-import com.example.portfolio.dto.CrawlerResponses.JobCrawlerResponse;
+import com.example.portfolio.dto.CrawlerResponses;
 import com.example.portfolio.dto.Responses.JobPostResponse;
 import com.example.portfolio.dto.Responses.JobSkillResponse;
 import com.example.portfolio.dto.Responses.MatchResponse;
@@ -80,7 +80,7 @@ public class JobService {
     }
 
     @Transactional
-    public JobCrawlerResponse crawlJobKoreaDeveloperJobs(String keyword, int limit) {
+    public CrawlerResponses.JobCrawlerResponse crawlJobKoreaDeveloperJobs(String keyword, int limit) {
         List<CrawledJobPost> crawledJobs = jobKoreaCrawlerService.crawlDeveloperJobs(keyword, limit);
         LocalDateTime crawledAt = LocalDateTime.now();
         List<JobPostResponse> savedJobs = new ArrayList<>();
@@ -104,7 +104,9 @@ public class JobService {
         }
 
         String normalizedKeyword = keyword == null || keyword.isBlank() ? "개발자" : keyword.trim();
-        return new JobCrawlerResponse(
+
+        // 여기서도 CrawlerResponses. 를 붙여야 합니다!
+        return new CrawlerResponses.JobCrawlerResponse(
                 jobKoreaCrawlerService.sourceName(),
                 normalizedKeyword,
                 Math.max(1, Math.min(limit, 30)),
