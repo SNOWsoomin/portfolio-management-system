@@ -1,0 +1,119 @@
+.loginContainer {
+  height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: auto;
+}
+
+.whiteBox {
+  display: flex;
+  width: 850px;
+  min-width: 850px;
+  height: 550px;
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.leftImage {
+  flex: 0 0 450px;
+  background: url('../assets/logimg.jpg') center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoOverlay {
+  color: white;
+  text-align: center;
+  background: rgba(0,0,0,0.3);
+  width: 100%;
+  padding: 20px;
+}
+
+.rightForm {
+  flex: 0 0 400px;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.rightForm form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.rightForm input {
+  width: 100%;
+  padding: 12px 20px;
+  margin-bottom: 12px;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.rightForm input:focus {
+  border-color: #888888;
+}
+
+.btnPrimary {
+  width: 100%;
+  border: 1px solid #d1d1d1;
+  background: var(--orange-main, #000);
+  color: white;
+  padding: 12px;
+  font-weight: bold;
+  border-radius: 10px;
+  margin-top: 10px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btnPrimary:hover {
+  opacity: 0.9;
+}
+
+.btnSecondary {
+  width: 100%;
+  border: 1px solid #d1d1d1;
+  background: #ffffff;
+  color: #333333;
+  padding: 12px;
+  font-weight: bold;
+  border-radius: 10px;
+  margin-top: 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btnSecondary:hover {
+  background: #f5f5f5;
+}
+
+.btnGoogle {
+  width: 100%;
+  border: 1px solid #d1d1d1;
+  padding: 10px;
+  border-radius: 20px;
+  margin-top: 15px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+h1 {
+  color: #000;
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: -0.5px;
+}

@@ -1,0 +1,31 @@
+.main-footer {
+  width: 100vw;
+  border-top: 1px solid #000;
+  padding: 15px 40px;
+  background-color: #fff;
+  margin-top: auto;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.footer-links button {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+}
+
+.footer-links button:hover {
+  text-decoration: underline;
+  color: #222;
+}
