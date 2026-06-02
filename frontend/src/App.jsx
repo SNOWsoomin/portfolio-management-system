@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // 라우터 임포트
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -8,12 +8,14 @@ import JobList from './pages/JobList';
 import Resume from './pages/Resume';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import MarkdownEditor from './MarkdownEditor'
 
 function App() {
   const [portfolios, setPortfolios] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
     fetch('http://localhost:8080/api/portfolios?userId=1')
       .then(res => {
         if(!res.ok) throw new Error("서버 응답 실패");
