@@ -32,7 +32,7 @@ public class AdminJobController {
     @PostMapping("/crawl/jobkorea")
     public ApiResponse<JobCrawlerResponse> crawlJobKorea(
             @RequestParam(defaultValue = "개발자") String keyword,
-            @RequestParam(defaultValue = "12") int limit
+            @RequestParam(defaultValue = "30") int limit
     ) {
         return ApiResponse.ok(jobService.crawlJobKoreaDeveloperJobs(keyword, limit), "잡코리아 개발자 공고를 수집했습니다.");
     }

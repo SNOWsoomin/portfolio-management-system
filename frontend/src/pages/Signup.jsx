@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Signup.css';
+import { api } from '../api';
 
 const SignupPage = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const SignupPage = () => {
     interestJob2: '', // 선택
     interestJob3: ''  // 선택
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,11 +48,19 @@ const SignupPage = () => {
     setStep((prev) => prev - 1);
   };
 
-  const handleSignupSubmit = (e) => {
+  const handleSignupSubmit = async (e) => {
     e.preventDefault();
-    console.log('UI 테스트 - 회원가입 완료 데이터:', formData);
-    
-    navigate('/login', { state: { signupSuccess: true } });
+    setError('');
+    try {
+      await api.signup({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+      navigate('/login', { state: { signupSuccess: true } });
+    } catch (err) {
+      setError(err.message || '회원가입에 실패했습니다.');
+    }
   };
 
   return (
@@ -76,6 +86,7 @@ const SignupPage = () => {
             <span style={{ fontWeight: step === 2 ? 'bold' : 'normal', color: step === 2 ? '#000' : '#aaa' }}>2</span> {' > '}
             <span style={{ fontWeight: step === 3 ? 'bold' : 'normal', color: step === 3 ? '#000' : '#aaa' }}>3</span>
           </div>
+          {error && <p style={{ color: '#dc2626', fontSize: '0.85rem', margin: '4px 0' }}>{error}</p>}
 
           {step === 1 && (
             <form onSubmit={handleNextStep}>

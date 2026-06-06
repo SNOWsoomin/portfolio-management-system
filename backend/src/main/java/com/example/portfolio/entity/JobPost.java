@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import java.time.LocalDateTime;
 
 @Entity
 public class JobPost extends BaseTimeEntity {
@@ -26,34 +27,79 @@ public class JobPost extends BaseTimeEntity {
     private String position;
 
     private String sourceName;
+
+    @Column(length = 1000)
     private String sourceUrl;
+
     private String externalId;
 
-    // Getters and Setters
-    public Long getId() { return id; }
+    private LocalDateTime crawledAt;
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getCompanyName() { return companyName; }
-    public void setCompanyName(String companyName) { this.companyName = companyName; }
+    public String getTitle() {
+        return title;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String getPosition() { return position; }
-    public void setPosition(String position) { this.position = position; }
+    public String getCompanyName() {
+        return companyName;
+    }
 
-    public String getSourceName() { return sourceName; }
-    public void setSourceName(String sourceName) { this.sourceName = sourceName; }
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
-    public String getSourceUrl() { return sourceUrl; }
-    public void setSourceUrl(String sourceUrl) { this.sourceUrl = sourceUrl; }
+    public String getDescription() {
+        return description;
+    }
 
-    public String getExternalId() { return externalId; }
-    public void setExternalId(String externalId) { this.externalId = externalId; }
-    private java.time.LocalDateTime crawledAt;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public java.time.LocalDateTime getCrawledAt() { return crawledAt; }
-    public void setCrawledAt(java.time.LocalDateTime crawledAt) { this.crawledAt = crawledAt; }
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
+    public LocalDateTime getCrawledAt() {
+        return crawledAt;
+    }
+
+    public void setCrawledAt(LocalDateTime crawledAt) {
+        this.crawledAt = crawledAt;
+    }
 }

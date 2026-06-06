@@ -7,13 +7,6 @@ import java.util.List;
 
 public class Responses {
     public record LoginResponse(String accessToken, String userName, String role) {}
-    public record ScopeStatusResponse(
-            String moduleName,
-            String owner,
-            String status,
-            List<String> implementedItems,
-            List<String> handoffTargets
-    ) {}
     public record UserResponse(Long id, String email, String name, Role role, LocalDateTime createdAt) {
         public static UserResponse from(User user) {
             return new UserResponse(user.getId(), user.getEmail(), user.getName(), user.getRole(), user.getCreatedAt());
@@ -93,6 +86,10 @@ public class Responses {
             String companyName,
             String description,
             String position,
+            String sourceName,
+            String sourceUrl,
+            String externalId,
+            LocalDateTime crawledAt,
             List<JobSkillResponse> skills
     ) {
         public static JobPostResponse from(JobPost jobPost, List<JobSkillResponse> skills) {
@@ -102,6 +99,10 @@ public class Responses {
                     jobPost.getCompanyName(),
                     jobPost.getDescription(),
                     jobPost.getPosition(),
+                    jobPost.getSourceName(),
+                    jobPost.getSourceUrl(),
+                    jobPost.getExternalId(),
+                    jobPost.getCrawledAt(),
                     skills
             );
         }

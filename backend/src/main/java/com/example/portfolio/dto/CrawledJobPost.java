@@ -10,4 +10,5 @@ public record CrawledJobPost(
         String description,
         String sourceUrl,
         List<String> skillNames
-) {}
+) {
+}

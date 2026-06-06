@@ -2,23 +2,29 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Login.css';
 
-const LoginPage = () => {
+const LoginPage = ({ onLogin }) => {
   const navigate = useNavigate();
   const location = useLocation();
   
   const signupSuccess = location.state?.signupSuccess;
   
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('user@test.com');
+  const [password, setPassword] = useState('user1234');
+  const [error, setError] = useState('');
 
   const handleLogoClick = () => {
     navigate('/');
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    console.log('UI 테스트 - 로그인 시도:', { email, password });
-    navigate('/'); 
+    setError('');
+    try {
+      await onLogin(email, password);
+      navigate('/');
+    } catch (err) {
+      setError(err.message || '로그인에 실패했습니다.');
+    }
   };
 
   return (
@@ -59,6 +65,11 @@ const LoginPage = () => {
             {signupSuccess && (
               <p style={{ color: 'green', fontSize: '0.85rem', margin: '4px 0' }}>
                 회원가입이 완료되었습니다. 로그인해주세요.
+              </p>
+            )}
+            {error && (
+              <p style={{ color: '#dc2626', fontSize: '0.85rem', margin: '4px 0' }}>
+                {error}
               </p>
             )}
             

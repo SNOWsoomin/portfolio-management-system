@@ -13,5 +13,19 @@ public class CrawlerResponses {
             int savedCount,
             LocalDateTime crawledAt,
             List<JobPostResponse> jobs
-    ) {}
+    ) {
+    }
+
+    public record JobCrawlerStatusResponse(
+            String sourceName,
+            String keyword,
+            int requestedLimit,
+            int fetchedCount,
+            int savedCount,
+            int totalJobCount,
+            LocalDateTime lastCrawledAt,
+            boolean running,
+            String lastError
+    ) {
+    }
 }
