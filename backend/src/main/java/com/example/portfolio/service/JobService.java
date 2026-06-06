@@ -3,7 +3,8 @@ package com.example.portfolio.service;
 import com.example.portfolio.dto.Requests.JobPostRequest;
 import com.example.portfolio.dto.Requests.JobSkillRequest;
 import com.example.portfolio.dto.CrawledJobPost;
-import com.example.portfolio.dto.CrawlerResponses;
+import com.example.portfolio.dto.CrawlerResponses.JobCrawlerResponse;
+import com.example.portfolio.dto.CrawlerResponses.JobCrawlerStatusResponse;
 import com.example.portfolio.dto.Responses.JobPostResponse;
 import com.example.portfolio.dto.Responses.JobSkillResponse;
 import com.example.portfolio.dto.Responses.MatchResponse;
@@ -34,6 +35,9 @@ public class JobService {
     private final SkillRepository skillRepository;
     private final UserSkillRepository userSkillRepository;
     private final JobKoreaCrawlerService jobKoreaCrawlerService;
+    private volatile JobCrawlerResponse lastCrawlerResponse;
+    private volatile boolean crawlerRunning;
+    private volatile String lastCrawlerError;
 
     public JobService(JobPostRepository jobPostRepository, JobSkillRepository jobSkillRepository,
                       SkillRepository skillRepository, UserSkillRepository userSkillRepository,
@@ -80,40 +84,75 @@ public class JobService {
     }
 
     @Transactional
-    public CrawlerResponses.JobCrawlerResponse crawlJobKoreaDeveloperJobs(String keyword, int limit) {
-        List<CrawledJobPost> crawledJobs = jobKoreaCrawlerService.crawlDeveloperJobs(keyword, limit);
-        LocalDateTime crawledAt = LocalDateTime.now();
-        List<JobPostResponse> savedJobs = new ArrayList<>();
+    public synchronized JobCrawlerResponse crawlJobKoreaDeveloperJobs(String keyword, int limit) {
+        crawlerRunning = true;
+        lastCrawlerError = null;
+        try {
+            String normalizedKeyword = keyword == null || keyword.isBlank() ? "개발자" : keyword.trim();
+            List<CrawledJobPost> crawledJobs = jobKoreaCrawlerService.crawlDeveloperJobs(keyword, limit);
+            LocalDateTime crawledAt = LocalDateTime.now();
+            List<JobPostResponse> savedJobs = new ArrayList<>();
 
-        for (CrawledJobPost crawledJob : crawledJobs) {
-            JobPost jobPost = jobPostRepository
-                    .findBySourceNameAndExternalId(jobKoreaCrawlerService.sourceName(), crawledJob.externalId())
-                    .orElseGet(JobPost::new);
-            jobPost.setTitle(crawledJob.title());
-            jobPost.setCompanyName(crawledJob.companyName());
-            jobPost.setPosition(crawledJob.position());
-            jobPost.setDescription(crawledJob.description());
-            jobPost.setSourceName(jobKoreaCrawlerService.sourceName());
-            jobPost.setSourceUrl(crawledJob.sourceUrl());
-            jobPost.setExternalId(crawledJob.externalId());
-            jobPost.setCrawledAt(crawledAt);
+            for (CrawledJobPost crawledJob : crawledJobs) {
+                JobPost jobPost = jobPostRepository
+                        .findBySourceNameAndExternalId(jobKoreaCrawlerService.sourceName(), crawledJob.externalId())
+                        .orElseGet(JobPost::new);
+                jobPost.setTitle(crawledJob.title());
+                jobPost.setCompanyName(crawledJob.companyName());
+                jobPost.setPosition(crawledJob.position());
+                jobPost.setDescription(crawledJob.description());
+                jobPost.setSourceName(jobKoreaCrawlerService.sourceName());
+                jobPost.setSourceUrl(crawledJob.sourceUrl());
+                jobPost.setExternalId(crawledJob.externalId());
+                jobPost.setCrawledAt(crawledAt);
 
-            JobPost saved = jobPostRepository.save(jobPost);
-            replaceSkillsByName(saved, crawledJob.skillNames());
-            savedJobs.add(toResponse(saved));
+                JobPost saved = jobPostRepository.save(jobPost);
+                replaceSkillsByName(saved, crawledJob.skillNames());
+                savedJobs.add(toResponse(saved));
+            }
+
+            JobCrawlerResponse response = new JobCrawlerResponse(
+                    jobKoreaCrawlerService.sourceName(),
+                    normalizedKeyword,
+                    Math.max(1, Math.min(limit, 60)),
+                    crawledJobs.size(),
+                    savedJobs.size(),
+                    crawledAt,
+                    savedJobs
+            );
+            lastCrawlerResponse = response;
+            return response;
+        } catch (RuntimeException exception) {
+            lastCrawlerError = exception.getMessage();
+            throw exception;
+        } finally {
+            crawlerRunning = false;
         }
+    }
 
-        String normalizedKeyword = keyword == null || keyword.isBlank() ? "개발자" : keyword.trim();
+    @Transactional
+    public void runAutomaticJobKoreaCrawl() {
+        try {
+            crawlJobKoreaDeveloperJobs("개발자", 30);
+        } catch (RuntimeException exception) {
+            lastCrawlerError = exception.getMessage();
+            crawlerRunning = false;
+        }
+    }
 
-        // 여기서도 CrawlerResponses. 를 붙여야 합니다!
-        return new CrawlerResponses.JobCrawlerResponse(
+    @Transactional(readOnly = true)
+    public JobCrawlerStatusResponse getCrawlerStatus() {
+        JobCrawlerResponse last = lastCrawlerResponse;
+        return new JobCrawlerStatusResponse(
                 jobKoreaCrawlerService.sourceName(),
-                normalizedKeyword,
-                Math.max(1, Math.min(limit, 30)),
-                crawledJobs.size(),
-                savedJobs.size(),
-                crawledAt,
-                savedJobs
+                last == null ? "개발자" : last.keyword(),
+                last == null ? 30 : last.requestedLimit(),
+                last == null ? 0 : last.fetchedCount(),
+                last == null ? 0 : last.savedCount(),
+                (int) jobPostRepository.count(),
+                last == null ? null : last.crawledAt(),
+                crawlerRunning,
+                lastCrawlerError
         );
     }
 

@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class JobKoreaCrawlerService {
     private static final String SOURCE_NAME = "JobKorea";
-    private static final String SEARCH_URL = "https://www.jobkorea.co.kr/Search/?stext=%s&tabType=recruit&Page_No=1";
+    private static final String SEARCH_URL = "https://www.jobkorea.co.kr/Search/?stext=%s&tabType=recruit&Page_No=%d";
     private static final Pattern JOB_ID_PATTERN = Pattern.compile("/Recruit/GI_Read/(\\d+)");
-    private static final Pattern DETAIL_LINK_PATTERN = Pattern.compile("https://www\\.jobkorea\\.co\\.kr/Recruit/GI_Read/\\d+[^\\\"<]*");
+    private static final Pattern DETAIL_LINK_PATTERN = Pattern.compile("(?:https://www\\.jobkorea\\.co\\.kr)?/Recruit/GI_Read/\\d+[^\\\"'<\\s]*");
 
     private static final Map<String, String> SKILL_CATEGORIES = new LinkedHashMap<>();
     static {
@@ -55,23 +55,40 @@ public class JobKoreaCrawlerService {
 
     public List<CrawledJobPost> crawlDeveloperJobs(String keyword, int limit) {
         String normalizedKeyword = (keyword == null || keyword.isBlank()) ? "개발자" : keyword.trim();
-        int safeLimit = Math.max(1, Math.min(limit, 30));
-        String url = SEARCH_URL.formatted(URLEncoder.encode(normalizedKeyword, StandardCharsets.UTF_8));
+        int safeLimit = Math.max(1, Math.min(limit, 60));
+        List<String> keywords = expandDeveloperKeywords(normalizedKeyword);
+        LinkedHashMap<String, CrawledJobPost> collected = new LinkedHashMap<>();
 
-        try {
-            Document document = Jsoup.connect(url)
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36")
-                    .referrer("https://www.jobkorea.co.kr/")
-                    .timeout(12_000)
-                    .get();
-            List<CrawledJobPost> parsed = parseCards(document, safeLimit);
-            if (!parsed.isEmpty()) {
-                return parsed;
+        for (String currentKeyword : keywords) {
+            for (int page = 1; page <= 3 && collected.size() < safeLimit; page++) {
+                String url = SEARCH_URL.formatted(URLEncoder.encode(currentKeyword, StandardCharsets.UTF_8), page);
+                try {
+                    Document document = Jsoup.connect(url)
+                            .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36")
+                            .referrer("https://www.jobkorea.co.kr/")
+                            .timeout(12_000)
+                            .get();
+                    List<CrawledJobPost> parsed = parseCards(document, safeLimit - collected.size());
+                    if (parsed.isEmpty()) {
+                        parsed = parseLinksFallback(document.html(), safeLimit - collected.size());
+                    }
+                    for (CrawledJobPost job : parsed) {
+                        if (!job.externalId().isBlank()) {
+                            collected.putIfAbsent(job.externalId(), job);
+                        }
+                        if (collected.size() >= safeLimit) {
+                            break;
+                        }
+                    }
+                } catch (IOException e) {
+                    if (collected.isEmpty() && currentKeyword.equals(keywords.get(0)) && page == 1) {
+                        throw new IllegalStateException("잡코리아 공고 수집에 실패했습니다. 잠시 후 다시 시도해주세요.", e);
+                    }
+                }
             }
-            return parseLinksFallback(document.html(), safeLimit);
-        } catch (IOException e) {
-            throw new IllegalStateException("잡코리아 공고 수집에 실패했습니다. 잠시 후 다시 시도해주세요.", e);
         }
+
+        return new ArrayList<>(collected.values());
     }
 
     public String sourceName() {
@@ -80,6 +97,20 @@ public class JobKoreaCrawlerService {
 
     public static String categoryOf(String skillName) {
         return SKILL_CATEGORIES.getOrDefault(skillName, "Tool");
+    }
+
+    private List<String> expandDeveloperKeywords(String keyword) {
+        LinkedHashSet<String> keywords = new LinkedHashSet<>();
+        keywords.add(keyword);
+        if (keyword.contains("개발")) {
+            keywords.add("백엔드 개발자");
+            keywords.add("프론트엔드 개발자");
+            keywords.add("웹 개발자");
+            keywords.add("Spring 개발자");
+            keywords.add("React 개발자");
+            keywords.add("Java 개발자");
+        }
+        return new ArrayList<>(keywords);
     }
 
     private List<CrawledJobPost> parseCards(Document document, int limit) {
@@ -223,10 +254,17 @@ public class JobKoreaCrawlerService {
     }
 
     private String normalizeUrl(String url) {
-        return Jsoup.clean(url, Safelist.none())
+        String cleaned = Jsoup.clean(url, Safelist.none())
                 .replace("&amp;", "&")
                 .replaceAll("\\s+", "")
                 .trim();
+        if (cleaned.startsWith("//")) {
+            return "https:" + cleaned;
+        }
+        if (cleaned.startsWith("/")) {
+            return "https://www.jobkorea.co.kr" + cleaned;
+        }
+        return cleaned;
     }
 
     private String extractExternalId(String sourceUrl) {
